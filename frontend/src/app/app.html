@@ -1,0 +1,994 @@
+<!-- Top Header Announcement -->
+<div class="top-bar">
+  <div class="container top-bar-content">
+    <span><i class="fa-solid fa-gift"></i> Mua iPad Trả Góp 0% Lãi Suất - Giao Nhanh 2h Trong Nội Thành!</span>
+    <div class="top-bar-links">
+      <a href="#"><i class="fa-solid fa-newspaper"></i> Tin Công Nghệ</a>
+      <a href="#"><i class="fa-solid fa-headset"></i> Tổng Đài 1800.1060</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Thegioididong Header -->
+<header class="main-header">
+  <div class="container header-content">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-logo">
+      <div class="logo-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+      <div class="logo-text">
+        <span class="brand-name">BANANA IPAD</span>
+        <span class="brand-sub">Thegioididong.com</span>
+      </div>
+    </a>
+
+    <!-- Location Selector -->
+    <div class="location-btn">
+      <i class="fa-solid fa-location-dot"></i>
+      <span>Xem giá tại<br><strong>Hà Nội</strong></span>
+      <i class="fa-solid fa-caret-down"></i>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Bạn tìm iPad Pro, Air, Gen 10 hay Mini..."
+        [(ngModel)]="searchQuery"
+      />
+      <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="header-actions">
+      <!-- Admin Mode Toggle Button (Requires Password) -->
+      <button
+        class="action-btn admin-toggle-btn"
+        [class.admin-active]="isAdminMode"
+        (click)="toggleAdminMode()"
+        [title]="isAdminMode ? 'Nhấn để tắt chế độ Admin' : 'Nhấn để mở khóa quyền Admin (Yêu cầu mật khẩu)'"
+      >
+        <i class="fa-solid" [ngClass]="isAdminMode ? 'fa-lock-open' : 'fa-lock'"></i>
+        <span>Admin: <strong>{{ isAdminMode ? 'BẬT (Đăng xuất)' : 'TẮT (Mở khóa)' }}</strong></span>
+      </button>
+
+      <!-- Admin Add Product Action Button -->
+      <button class="action-btn add-product-trigger" *ngIf="isAdminMode" (click)="openAddProductModal()">
+        <i class="fa-solid fa-square-plus"></i>
+        <span>+ Thêm Sản Phẩm</span>
+      </button>
+
+      <!-- Admin Change Password Button -->
+      <button class="action-btn change-pass-trigger" *ngIf="isAdminMode" (click)="openChangePasswordModal()" title="Đổi mật khẩu Admin">
+        <i class="fa-solid fa-key"></i>
+        <span>Đổi Mật Khẩu</span>
+      </button>
+
+      <button class="action-btn list-trigger" (click)="openCustomersModal()">
+        <i class="fa-solid fa-users"></i>
+        <span>Danh sách đã ĐK</span>
+      </button>
+
+      <!-- Đăng nhập / Thông tin tài khoản -->
+      <ng-container *ngIf="!currentUser">
+        <button class="action-btn login-trigger" (click)="openLoginModal()">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Đăng nhập</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="currentUser">
+        <div class="user-info-chip">
+          <i class="fa-solid fa-circle-user"></i>
+          <span class="user-chip-name">{{ currentUser.fullName }}</span>
+          <span class="user-chip-sub">@{{ currentUser.username }}</span>
+        </div>
+        <button class="action-btn logout-btn" (click)="logoutUser()" title="Đăng xuất tài khoản">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Đăng xuất</span>
+        </button>
+      </ng-container>
+    </div>
+  </div>
+</header>
+
+<!-- Category Navigation Bar -->
+<nav class="category-nav">
+  <div class="container nav-content">
+    <button class="nav-item" [class.active]="selectedSeries === 'All'" (click)="selectedSeries = 'All'">
+      <i class="fa-solid fa-tablet-screen-button"></i> Tất cả iPad
+    </button>
+    <button class="nav-item" [class.active]="selectedSeries === 'Pro'" (click)="selectedSeries = 'Pro'">
+      <i class="fa-solid fa-crown"></i> iPad Pro (M4)
+    </button>
+    <button class="nav-item" [class.active]="selectedSeries === 'Air'" (click)="selectedSeries = 'Air'">
+      <i class="fa-solid fa-wind"></i> iPad Air (M2)
+    </button>
+    <button class="nav-item" [class.active]="selectedSeries === 'Gen 10'" (click)="selectedSeries = 'Gen 10'">
+      <i class="fa-solid fa-feather"></i> iPad Gen 10
+    </button>
+    <button class="nav-item" [class.active]="selectedSeries === 'Mini'" (click)="selectedSeries = 'Mini'">
+      <i class="fa-solid fa-compress"></i> iPad mini 7
+    </button>
+  </div>
+</nav>
+
+<!-- Main Container -->
+<main class="container main-body fade-in">
+
+  <!-- Admin Toolbar Banner when Admin Mode is Active -->
+  <div class="admin-banner-bar" *ngIf="isAdminMode">
+    <div class="admin-banner-info">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span><strong>CHẾ ĐỘ QUẢN TRỊ VIÊN (ADMIN MODE)</strong> — Bạn có quyền <strong>Thêm mới</strong>, <strong>Chỉnh sửa</strong> hoặc <strong>Xóa</strong> sản phẩm trực tiếp vào D1 Database.</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button class="btn btn-sm btn-admin-add" (click)="openAddProductModal()">
+        <i class="fa-solid fa-plus"></i> Thêm Sản Phẩm
+      </button>
+      <button class="btn btn-sm btn-admin-change-pass" (click)="openChangePasswordModal()" title="Đổi mật khẩu Admin">
+        <i class="fa-solid fa-key"></i> Đổi Mật Khẩu
+      </button>
+      <button class="btn btn-sm btn-admin-logout" (click)="logoutAdmin()" title="Khóa chế độ Admin">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Hero Promo Banner Carousel -->
+  <section class="hero-section">
+    <div class="hero-main-banner">
+      <div class="banner-badge">BOOMING DEAL IPAD</div>
+      <div class="banner-text">
+        <h2>iPad Pro M4 & iPad Air M2</h2>
+        <p>Màn hình Ultra Retina Tandem OLED - Siêu mỏng 5.1mm - Giá Rẻ Quá!</p>
+        <div class="hero-price-tag">Chỉ từ <strong>16.290.000₫</strong> + Trả góp 0%</div>
+      </div>
+      <div class="banner-cta">
+        <button class="buy-now-btn" (click)="openRegisterModal()">ĐĂNG KÝ MUA NGAY</button>
+      </div>
+    </div>
+
+    <div class="hero-side-banners">
+      <div class="side-card">
+        <i class="fa-solid fa-shield-halved side-icon"></i>
+        <div>
+          <h4>Bảo hành chính hãng 12 tháng</h4>
+          <p>1 đổi 1 trong 30 ngày nếu lỗi</p>
+        </div>
+      </div>
+      <div class="side-card">
+        <i class="fa-solid fa-truck-fast side-icon"></i>
+        <div>
+          <h4>Giao hàng siêu tốc 2H</h4>
+          <p>Miễn phí giao hàng đơn từ 500k</p>
+        </div>
+      </div>
+      <div class="side-card highlight-card">
+        <i class="fa-solid fa-percent side-icon"></i>
+        <div>
+          <h4>Ưu đãi Khách Hàng Thân Thiết</h4>
+          <p>Đăng ký tài khoản nhận ngay Voucher 500k</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Controls Section -->
+  <section class="filter-section">
+    <div class="filter-header">
+      <h3><i class="fa-solid fa-sliders"></i> Danh Sách iPad Chính Hãng Apple ({{ filteredProducts.length }})</h3>
+      <div class="sort-controls">
+        <label for="sortBy">Sắp xếp theo:</label>
+        <select id="sortBy" [(ngModel)]="sortBy">
+          <option value="featured">Nổi bật nhất</option>
+          <option value="price-low">Giá thấp đến cao</option>
+          <option value="price-high">Giá cao đến thấp</option>
+          <option value="discount">Giảm giá nhiều nhất</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-pills">
+      <span class="filter-label">Dung lượng:</span>
+      <button class="pill-btn" [class.active]="selectedCapacity === 'All'" (click)="selectedCapacity = 'All'">Tất cả</button>
+      <button class="pill-btn" [class.active]="selectedCapacity === '64GB'" (click)="selectedCapacity = '64GB'">64GB</button>
+      <button class="pill-btn" [class.active]="selectedCapacity === '128GB'" (click)="selectedCapacity = '128GB'">128GB</button>
+      <button class="pill-btn" [class.active]="selectedCapacity === '256GB'" (click)="selectedCapacity = '256GB'">256GB</button>
+      <button class="pill-btn" [class.active]="selectedCapacity === '512GB'" (click)="selectedCapacity = '512GB'">512GB</button>
+      <button class="pill-btn" [class.active]="selectedCapacity === '1TB'" (click)="selectedCapacity = '1TB'">1TB</button>
+    </div>
+  </section>
+
+  <!-- Loading & Empty States for Products -->
+  <div class="loading-state" *ngIf="productsLoading">
+    <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+    <p>Đang tải danh sách sản phẩm từ D1 Database...</p>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="productsError && !productsLoading">
+    <i class="fa-solid fa-circle-exclamation"></i> {{ productsError }}
+  </div>
+
+  <!-- Product Grid (TGDĐ Style Cards) -->
+  <section class="product-grid" *ngIf="!productsLoading">
+    <div class="product-card" *ngFor="let p of filteredProducts">
+      <!-- Promo Tag Badge -->
+      <div class="card-badge" *ngIf="p.badge">{{ p.badge }}</div>
+
+      <!-- Admin Actions: Edit & Delete -->
+      <div class="card-admin-actions" *ngIf="isAdminMode">
+        <button class="btn-edit-prod" (click)="openEditProductModal(p, $event)" title="Admin: Chỉnh sửa thông tin sản phẩm">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+        <button class="btn-delete-prod" (click)="deleteProduct(p, $event)" title="Admin: Xóa sản phẩm khỏi DB">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </div>
+
+      <!-- Image -->
+      <div class="card-img-wrap">
+        <img [src]="p.image" [alt]="p.name" loading="lazy" />
+      </div>
+
+      <!-- Content -->
+      <div class="card-details">
+        <span class="series-tag">Apple iPad {{ p.series }}</span>
+        <h4 class="product-title">{{ p.name }}</h4>
+
+        <div class="spec-pills">
+          <span class="spec-chip"><i class="fa-solid fa-memory"></i> {{ p.capacity }}</span>
+          <span class="spec-chip"><i class="fa-solid fa-palette"></i> {{ p.color }}</span>
+        </div>
+
+        <div class="price-box">
+          <span class="current-price">{{ formatPrice(p.price) }}</span>
+          <div class="old-price-box" *ngIf="p.originalPrice > p.price">
+            <span class="old-price">{{ formatPrice(p.originalPrice) }}</span>
+            <span class="discount-tag">-{{ p.discountPercent }}%</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="rating">
+            <i class="fa-solid fa-star"></i>
+            <span>{{ p.rating }} ({{ p.reviewsCount }})</span>
+          </div>
+          <button class="btn-buy" (click)="openRegisterModal()">MUA NGAY</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer (Thegioididong Style) -->
+<footer class="main-footer">
+  <div class="container footer-grid">
+    <div class="footer-col">
+      <h4>Tổng đài hỗ trợ (Miễn phí)</h4>
+      <p>Gọi mua: <strong>1800.1060</strong> (7:30 - 22:00)</p>
+      <p>Khiếu nại: <strong>1800.1062</strong> (8:00 - 21:30)</p>
+
+      <h4 style="margin-top: 15px;">Dịch vụ thanh toán</h4>
+      <div class="payment-icons">
+        <span class="pay-tag"><i class="fa-brands fa-cc-visa"></i> Visa</span>
+        <span class="pay-tag"><i class="fa-brands fa-cc-mastercard"></i> Mastercard</span>
+        <span class="pay-tag"><i class="fa-solid fa-qrcode"></i> VNPay</span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Chính sách & Hướng dẫn</h4>
+      <ul>
+        <li><a href="#">Chính sách bảo hành iPad</a></li>
+        <li><a href="#">Chính sách đổi trả 30 ngày</a></li>
+        <li><a href="#">Giao hàng & Lắp đặt</a></li>
+        <li><a href="#">Hướng dẫn mua trả góp 0%</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Hệ thống Banana iPad Store</h4>
+      <p><i class="fa-solid fa-store"></i> 3.000+ Siêu thị trên toàn quốc</p>
+      <p><i class="fa-solid fa-clock"></i> Mở cửa 8:00 - 22:00 (Cả CN & Lễ)</p>
+      <p><i class="fa-solid fa-envelope"></i> cskh&#64;bananaipad.com</p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      © 2026 Banana iPad Store - Mô phỏng giao diện Thegioididong.com | Kết nối Cloudflare D1 Backend API
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL 1: ĐĂNG KÝ KHÁCH HÀNG (POST /api/registrations) -->
+<div class="modal-backdrop fade-in" *ngIf="showRegisterModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Khách Hàng</h3>
+      <button class="close-btn" (click)="closeRegisterModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="alert alert-danger fade-in" *ngIf="formError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ formError }}
+      </div>
+
+      <div class="alert alert-success fade-in" *ngIf="formSuccess">
+        <i class="fa-solid fa-circle-check"></i> {{ formSuccess }}
+      </div>
+
+      <form (ngSubmit)="submitRegistration()" *ngIf="!registeredDataPreview">
+        <div class="form-group">
+          <label for="fullName">Họ và tên <span class="required">*</span></label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Ví dụ: Nguyễn Văn An"
+            [(ngModel)]="registerForm.fullName"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phoneNumber">Số điện thoại <span class="required">*</span></label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="0987654321"
+              [(ngModel)]="registerForm.phoneNumber"
+              required
+            />
+            <small class="form-hint">Nhập 10–11 chữ số</small>
+          </div>
+
+          <div class="form-group">
+            <label for="username">Tên đăng nhập <span class="required">*</span></label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="nguyenvanan"
+              [(ngModel)]="registerForm.username"
+              required
+            />
+            <small class="form-hint">Duy nhất trong D1 Database</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Địa chỉ giao hàng <span class="required">*</span></label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            placeholder="Số 102 Đường Cầu Giấy, Hà Nội"
+            [(ngModel)]="registerForm.address"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mật khẩu <span class="required">*</span></label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            [(ngModel)]="registerForm.password"
+            required
+          />
+          <small class="form-hint"><i class="fa-solid fa-shield-halved"></i> Mật khẩu sẽ được mã hóa an toàn bằng Web Crypto SHA-256</small>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeRegisterModal()">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" [disabled]="formLoading">
+            <span *ngIf="!formLoading"><i class="fa-solid fa-paper-plane"></i> Gửi Đăng Ký</span>
+            <span *ngIf="formLoading"><i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="success-preview fade-in" *ngIf="registeredDataPreview">
+        <h4><i class="fa-solid fa-id-card"></i> Thông tin khách hàng vừa khởi tạo:</h4>
+        <div class="data-row"><strong>Mã khách hàng (ID):</strong> <code>{{ registeredDataPreview.id }}</code></div>
+        <div class="data-row"><strong>Họ và tên:</strong> {{ registeredDataPreview.fullName }}</div>
+        <div class="data-row"><strong>Số điện thoại:</strong> {{ registeredDataPreview.phoneNumber }}</div>
+        <div class="data-row"><strong>Địa chỉ:</strong> {{ registeredDataPreview.address }}</div>
+        <div class="data-row"><strong>Tên đăng nhập:</strong> {{ registeredDataPreview.username }}</div>
+        <div class="data-row"><strong>Thời gian đăng ký:</strong> {{ formatDate(registeredDataPreview.createdAt) }}</div>
+        <div class="data-notice">
+          <i class="fa-solid fa-lock"></i> <em>Lưu ý: Mật khẩu đã được mã hóa lưu trữ an toàn trong Cloudflare D1 và không bao giờ được trả về frontend.</em>
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 15px;">
+          <button type="button" class="btn btn-primary" (click)="registeredDataPreview = null">Đăng ký thêm tài khoản khác</button>
+          <button type="button" class="btn btn-secondary" (click)="closeRegisterModal()">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2: DANH SÁCH KHÁCH HÀNG (GET /api/registrations) -->
+<div class="modal-backdrop fade-in" *ngIf="showCustomersModal">
+  <div class="modal-box modal-lg">
+    <div class="modal-header">
+      <h3><i class="fa-solid fa-users-viewfinder"></i> Danh Sách Khách Hàng</h3>
+      <button class="close-btn" (click)="closeCustomersModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="table-toolbar">
+        <div class="table-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            placeholder="Tìm theo tên, SĐT, username..."
+            [(ngModel)]="customerSearchQuery"
+          />
+        </div>
+        <button class="btn btn-secondary" (click)="fetchCustomersList()" [disabled]="customersLoading">
+          <i class="fa-solid fa-rotate-right" [class.fa-spin]="customersLoading"></i> Làm mới
+        </button>
+      </div>
+
+      <div class="loading-state" *ngIf="customersLoading">
+        <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+        <p>Đang tải dữ liệu từ Cloudflare D1 Database...</p>
+      </div>
+
+      <div class="alert alert-danger" *ngIf="customersError && !customersLoading">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ customersError }}
+      </div>
+
+      <div class="empty-state" *ngIf="!customersLoading && !customersError && filteredCustomers.length === 0">
+        <i class="fa-solid fa-folder-open fa-3x"></i>
+        <p>Chưa có dữ liệu khách hàng đăng ký.</p>
+      </div>
+
+      <div class="table-responsive" *ngIf="!customersLoading && !customersError && filteredCustomers.length > 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mã ID</th>
+              <th>Họ & Tên</th>
+              <th>Số Điện Thoại</th>
+              <th>Địa Chỉ</th>
+              <th>Tên Đăng Nhập</th>
+              <th>Ngày Đăng Ký</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredCustomers; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td><code>{{ item.id.substring(0, 8) }}...</code></td>
+              <td><strong>{{ item.fullName }}</strong></td>
+              <td>{{ item.phoneNumber }}</td>
+              <td>{{ item.address }}</td>
+              <td><span class="user-badge">{{ item.username }}</span></td>
+              <td>{{ formatDate(item.createdAt) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal-footer-actions">
+      <button class="btn btn-secondary" (click)="closeCustomersModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 3: ADMIN THÊM SẢN PHẨM MỚI (POST /api/products) -->
+<div class="modal-backdrop fade-in" *ngIf="showAddProductModal">
+  <div class="modal-box modal-lg">
+    <div class="modal-header admin-modal-header">
+      <h3><i class="fa-solid fa-square-plus"></i> Admin: Thêm Sản Phẩm iPad Mới Vào Cửa Hàng</h3>
+      <button class="close-btn" (click)="closeAddProductModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="alert alert-danger fade-in" *ngIf="addProductError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ addProductError }}
+      </div>
+
+      <div class="alert alert-success fade-in" *ngIf="addProductSuccess">
+        <i class="fa-solid fa-circle-check"></i> {{ addProductSuccess }}
+      </div>
+
+      <form (ngSubmit)="submitAddProduct()">
+        <!-- Product Name -->
+        <div class="form-group">
+          <label for="prodName">Tên sản phẩm đầy đủ <span class="required">*</span></label>
+          <input
+            type="text"
+            id="prodName"
+            name="name"
+            placeholder="Ví dụ: iPad Pro 11 inch M4 Wi-Fi 512GB Space Black"
+            [(ngModel)]="addProductForm.name"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <!-- Series -->
+          <div class="form-group">
+            <label for="prodSeries">Dòng iPad (Series) <span class="required">*</span></label>
+            <select id="prodSeries" name="series" [(ngModel)]="addProductForm.series" required>
+              <option value="Pro">iPad Pro</option>
+              <option value="Air">iPad Air</option>
+              <option value="Gen 10">iPad Gen 10</option>
+              <option value="Mini">iPad Mini</option>
+            </select>
+          </div>
+
+          <!-- Storage Capacity -->
+          <div class="form-group">
+            <label for="prodCapacity">Dung lượng <span class="required">*</span></label>
+            <select id="prodCapacity" name="capacity" [(ngModel)]="addProductForm.capacity" required>
+              <option value="64GB">64GB</option>
+              <option value="128GB">128GB</option>
+              <option value="256GB">256GB</option>
+              <option value="512GB">512GB</option>
+              <option value="1TB">1TB</option>
+            </select>
+          </div>
+
+          <!-- Color -->
+          <div class="form-group">
+            <label for="prodColor">Màu sắc <span class="required">*</span></label>
+            <input
+              type="text"
+              id="prodColor"
+              name="color"
+              placeholder="Space Black, Silver, Blue..."
+              [(ngModel)]="addProductForm.color"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Price -->
+          <div class="form-group">
+            <label for="prodPrice">Giá bán khuyến mãi (VNĐ) <span class="required">*</span></label>
+            <input
+              type="number"
+              id="prodPrice"
+              name="price"
+              placeholder="28490000"
+              [(ngModel)]="addProductForm.price"
+              required
+            />
+            <small class="form-hint" *ngIf="addProductForm.price">Xem trước: {{ formatPrice(addProductForm.price) }}</small>
+          </div>
+
+          <!-- Original Price -->
+          <div class="form-group">
+            <label for="prodOriginalPrice">Giá gốc niêm yết (VNĐ)</label>
+            <input
+              type="number"
+              id="prodOriginalPrice"
+              name="originalPrice"
+              placeholder="29990000"
+              [(ngModel)]="addProductForm.originalPrice"
+            />
+            <small class="form-hint" *ngIf="addProductForm.originalPrice">Xem trước: {{ formatPrice(addProductForm.originalPrice) }}</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Badge Tag -->
+          <div class="form-group">
+            <label for="prodBadge">Nhãn khuyến mãi (Badge)</label>
+            <input
+              type="text"
+              id="prodBadge"
+              name="badge"
+              placeholder="Hàng mới về, Trả góp 0%, Giảm 2 triệu..."
+              [(ngModel)]="addProductForm.badge"
+            />
+          </div>
+
+          <!-- Is Hot Checkbox -->
+          <div class="form-group checkbox-group" style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
+            <input
+              type="checkbox"
+              id="prodIsHot"
+              name="isHot"
+              [(ngModel)]="addProductForm.isHot"
+            />
+            <label for="prodIsHot" style="margin: 0; cursor: pointer;">🔥 Sản phẩm Hot / Nổi bật</label>
+          </div>
+        </div>
+
+        <!-- Image URL & Preset Selection -->
+        <div class="form-group">
+          <label for="prodImage">Đường dẫn hình ảnh (Image URL) <span class="required">*</span></label>
+          <input
+            type="url"
+            id="prodImage"
+            name="image"
+            placeholder="https://images.unsplash.com/..."
+            [(ngModel)]="addProductForm.image"
+            required
+          />
+          <div class="image-preset-picker" style="margin-top: 8px;">
+            <span style="font-size: 12px; color: #666; margin-right: 8px;">Chọn ảnh mẫu nhanh:</span>
+            <button
+              type="button"
+              class="btn-preset-img"
+              *ngFor="let sample of sampleImages"
+              (click)="selectSampleImage(sample.url)"
+            >
+              {{ sample.label }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Image Preview Card -->
+        <div class="image-preview-box" *ngIf="addProductForm.image">
+          <span>Xem trước ảnh sản phẩm:</span>
+          <img [src]="addProductForm.image" alt="Preview" style="max-height: 80px; object-fit: contain; border-radius: 6px; border: 1px solid #ddd; padding: 4px;" />
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" (click)="closeAddProductModal()">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary btn-admin-save" [disabled]="addProductLoading">
+            <span *ngIf="!addProductLoading"><i class="fa-solid fa-floppy-disk"></i> Lưu Sản Phẩm Mới (D1 DB)</span>
+            <span *ngIf="addProductLoading"><i class="fa-solid fa-spinner fa-spin"></i> Đang lưu vào D1...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 4: ADMIN SỬA SẢN PHẨM (PUT /api/products/:id) -->
+<div class="modal-backdrop fade-in" *ngIf="showEditProductModal">
+  <div class="modal-box modal-lg">
+    <div class="modal-header admin-edit-header">
+      <h3><i class="fa-solid fa-pen-to-square"></i> Admin: Chỉnh Sửa Thông Tin Sản Phẩm iPad</h3>
+      <button class="close-btn" (click)="closeEditProductModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="alert alert-danger fade-in" *ngIf="editProductError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ editProductError }}
+      </div>
+
+      <div class="alert alert-success fade-in" *ngIf="editProductSuccess">
+        <i class="fa-solid fa-circle-check"></i> {{ editProductSuccess }}
+      </div>
+
+      <form (ngSubmit)="submitEditProduct()">
+        <!-- Product Name -->
+        <div class="form-group">
+          <label for="editProdName">Tên sản phẩm <span class="required">*</span></label>
+          <input
+            type="text"
+            id="editProdName"
+            name="editName"
+            placeholder="Tên sản phẩm"
+            [(ngModel)]="editProductForm.name"
+            required
+          />
+        </div>
+
+        <div class="form-row">
+          <!-- Series -->
+          <div class="form-group">
+            <label for="editProdSeries">Dòng iPad (Series) <span class="required">*</span></label>
+            <select id="editProdSeries" name="editSeries" [(ngModel)]="editProductForm.series" required>
+              <option value="Pro">iPad Pro</option>
+              <option value="Air">iPad Air</option>
+              <option value="Gen 10">iPad Gen 10</option>
+              <option value="Mini">iPad Mini</option>
+            </select>
+          </div>
+
+          <!-- Storage Capacity -->
+          <div class="form-group">
+            <label for="editProdCapacity">Dung lượng <span class="required">*</span></label>
+            <select id="editProdCapacity" name="editCapacity" [(ngModel)]="editProductForm.capacity" required>
+              <option value="64GB">64GB</option>
+              <option value="128GB">128GB</option>
+              <option value="256GB">256GB</option>
+              <option value="512GB">512GB</option>
+              <option value="1TB">1TB</option>
+            </select>
+          </div>
+
+          <!-- Color -->
+          <div class="form-group">
+            <label for="editProdColor">Màu sắc <span class="required">*</span></label>
+            <input
+              type="text"
+              id="editProdColor"
+              name="editColor"
+              placeholder="Màu sắc"
+              [(ngModel)]="editProductForm.color"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Price -->
+          <div class="form-group">
+            <label for="editProdPrice">Giá bán khuyến mãi (VNĐ) <span class="required">*</span></label>
+            <input
+              type="number"
+              id="editProdPrice"
+              name="editPrice"
+              placeholder="28490000"
+              [(ngModel)]="editProductForm.price"
+              required
+            />
+            <small class="form-hint" *ngIf="editProductForm.price">Xem trước: {{ formatPrice(editProductForm.price) }}</small>
+          </div>
+
+          <!-- Original Price -->
+          <div class="form-group">
+            <label for="editProdOriginalPrice">Giá gốc niêm yết (VNĐ)</label>
+            <input
+              type="number"
+              id="editProdOriginalPrice"
+              name="editOriginalPrice"
+              placeholder="29990000"
+              [(ngModel)]="editProductForm.originalPrice"
+            />
+            <small class="form-hint" *ngIf="editProductForm.originalPrice">Xem trước: {{ formatPrice(editProductForm.originalPrice) }}</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Badge Tag -->
+          <div class="form-group">
+            <label for="editProdBadge">Nhãn khuyến mãi (Badge)</label>
+            <input
+              type="text"
+              id="editProdBadge"
+              name="editBadge"
+              placeholder="Hàng mới về, Giảm 2 triệu..."
+              [(ngModel)]="editProductForm.badge"
+            />
+          </div>
+
+          <!-- Is Hot Checkbox -->
+          <div class="form-group checkbox-group" style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
+            <input
+              type="checkbox"
+              id="editProdIsHot"
+              name="editIsHot"
+              [(ngModel)]="editProductForm.isHot"
+            />
+            <label for="editProdIsHot" style="margin: 0; cursor: pointer;">🔥 Sản phẩm Hot / Nổi bật</label>
+          </div>
+        </div>
+
+        <!-- Image URL & Preset Selection -->
+        <div class="form-group">
+          <label for="editProdImage">Đường dẫn hình ảnh (Image URL) <span class="required">*</span></label>
+          <input
+            type="url"
+            id="editProdImage"
+            name="editImage"
+            placeholder="https://..."
+            [(ngModel)]="editProductForm.image"
+            required
+          />
+          <div class="image-preset-picker" style="margin-top: 8px;">
+            <span style="font-size: 12px; color: #666; margin-right: 8px;">Chọn ảnh mẫu:</span>
+            <button
+              type="button"
+              class="btn-preset-img"
+              *ngFor="let sample of sampleImages"
+              (click)="selectSampleImageForEdit(sample.url)"
+            >
+              {{ sample.label }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Image Preview Card -->
+        <div class="image-preview-box" *ngIf="editProductForm.image">
+          <span>Xem trước ảnh:</span>
+          <img [src]="editProductForm.image" alt="Preview" style="max-height: 80px; object-fit: contain; border-radius: 6px; border: 1px solid #ddd; padding: 4px;" />
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" (click)="closeEditProductModal()">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary btn-admin-update" [disabled]="editProductLoading">
+            <span *ngIf="!editProductLoading"><i class="fa-solid fa-check"></i> Lưu Cập Nhật (D1 DB)</span>
+            <span *ngIf="editProductLoading"><i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 5: XÁC THỰC MẬT KHẨU ADMIN -->
+<div class="modal-backdrop fade-in" *ngIf="showAdminAuthModal">
+  <div class="modal-box modal-sm">
+    <div class="modal-header admin-auth-header">
+      <h3><i class="fa-solid fa-shield-halved"></i> Xác Thực Quyền Quản Trị Viên</h3>
+      <button class="close-btn" (click)="closeAdminAuthModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="alert alert-danger fade-in" *ngIf="adminAuthError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ adminAuthError }}
+      </div>
+
+      <p style="font-size: 13px; color: #555; margin-bottom: 15px;">
+        Vui lòng nhập mật khẩu quản trị viên để mở khóa các tính năng <strong>Thêm</strong>, <strong>Sửa</strong> và <strong>Xóa</strong> sản phẩm:
+      </p>
+
+      <form (ngSubmit)="submitAdminAuth()">
+        <div class="form-group">
+          <label for="adminPassword">Mật khẩu Admin <span class="required">*</span></label>
+          <input
+            type="password"
+            id="adminPassword"
+            name="adminPassword"
+            placeholder="Nhập mật khẩu (Mặc định: admin123)"
+            [(ngModel)]="adminPasswordInput"
+            required
+            autofocus
+          />
+          <small class="form-hint"><i class="fa-solid fa-key"></i> Mật khẩu mặc định hệ thống: <strong>admin123</strong> (Có thể đổi sau khi đăng nhập)</small>
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" (click)="closeAdminAuthModal()">Hủy</button>
+          <button type="submit" class="btn btn-primary btn-admin-auth">
+            <i class="fa-solid fa-unlock"></i> Mở Khóa Admin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 7: ĐĂNG NHẬP KHÁCH HÀNG -->
+<div class="modal-backdrop fade-in" *ngIf="showLoginModal">
+  <div class="modal-box modal-sm">
+    <div class="modal-header login-modal-header">
+      <h3><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Tài Khoản</h3>
+      <button class="close-btn" (click)="closeLoginModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="login-welcome-icon">
+        <i class="fa-solid fa-user-circle"></i>
+        <p>Chào mừng trở lại! Đăng nhập để tiếp tục mua sắm.</p>
+      </div>
+
+      <div class="alert alert-danger fade-in" *ngIf="loginError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ loginError }}
+      </div>
+
+      <form (ngSubmit)="submitLogin()">
+        <div class="form-group">
+          <label for="loginUsername">Tên đăng nhập <span class="required">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input
+              type="text"
+              id="loginUsername"
+              name="loginUsername"
+              placeholder="Nhập tên đăng nhập"
+              [(ngModel)]="loginUsername"
+              required
+              autofocus
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Mật khẩu <span class="required">*</span></label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input
+              type="password"
+              id="loginPassword"
+              name="loginPassword"
+              placeholder="Nhập mật khẩu"
+              [(ngModel)]="loginPassword"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" (click)="closeLoginModal()">Hủy</button>
+          <button type="submit" class="btn btn-primary btn-login" [disabled]="loginLoading">
+            <span *ngIf="!loginLoading"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</span>
+            <span *ngIf="loginLoading"><i class="fa-solid fa-spinner fa-spin"></i> Đang xác thực...</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="login-register-hint">
+        Chưa có tài khoản?
+        <button class="link-btn" (click)="closeLoginModal(); openRegisterModal()">Đăng ký ngay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 6: ĐỔI MẬT KHẨU ADMIN -->
+<div class="modal-backdrop fade-in" *ngIf="showChangePasswordModal">
+  <div class="modal-box modal-sm">
+    <div class="modal-header admin-change-pass-header">
+      <h3><i class="fa-solid fa-key"></i> Đổi Mật Khẩu Quản Trị Viên</h3>
+      <button class="close-btn" (click)="closeChangePasswordModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="alert alert-danger fade-in" *ngIf="changePasswordError">
+        <i class="fa-solid fa-triangle-exclamation"></i> {{ changePasswordError }}
+      </div>
+
+      <div class="alert alert-success fade-in" *ngIf="changePasswordSuccess">
+        <i class="fa-solid fa-circle-check"></i> {{ changePasswordSuccess }}
+      </div>
+
+      <form (ngSubmit)="submitChangePassword()">
+        <div class="form-group">
+          <label for="currentPass">Mật khẩu hiện tại <span class="required">*</span></label>
+          <input
+            type="password"
+            id="currentPass"
+            name="currentPass"
+            placeholder="Nhập mật khẩu hiện tại"
+            [(ngModel)]="currentPasswordInput"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="newPass">Mật khẩu mới <span class="required">*</span></label>
+          <input
+            type="password"
+            id="newPass"
+            name="newPass"
+            placeholder="Tối thiểu 4 ký tự"
+            [(ngModel)]="newPasswordInput"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmNewPass">Xác nhận mật khẩu mới <span class="required">*</span></label>
+          <input
+            type="password"
+            id="confirmNewPass"
+            name="confirmNewPass"
+            placeholder="Nhập lại mật khẩu mới"
+            [(ngModel)]="confirmNewPasswordInput"
+            required
+          />
+        </div>
+
+        <div class="modal-footer-actions" style="margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" (click)="closeChangePasswordModal()">Hủy</button>
+          <button type="submit" class="btn btn-primary btn-change-pass-save">
+            <i class="fa-solid fa-floppy-disk"></i> Lưu Mật Khẩu Mới
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
