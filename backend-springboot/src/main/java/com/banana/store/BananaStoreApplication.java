@@ -2,6 +2,7 @@ package com.banana.store;
 
 import com.banana.store.entity.Product;
 import com.banana.store.repository.ProductRepository;
+import com.banana.store.service.ReviewService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,7 @@ public class BananaStoreApplication {
     }
 
     @Bean
-    public CommandLineRunner initData(ProductRepository productRepository) {
+    public CommandLineRunner initData(ProductRepository productRepository, ReviewService reviewService) {
         return args -> {
             if (productRepository.count() == 0) {
                 List<Product> sampleProducts = List.of(
@@ -128,6 +129,7 @@ public class BananaStoreApplication {
                 productRepository.saveAll(sampleProducts);
                 System.out.println("✅ [Spring Boot] Initialized sample iPad products into SQL Server!");
             }
+            reviewService.seedSampleReviewsIfEmpty();
         };
     }
 }
