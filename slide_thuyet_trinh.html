@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Đồ Án Tốt Nghiệp - Banana iPad Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #0f172a;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Presentation Canvas */
+    .deck-container {
+      flex: 1;
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .slide {
+      display: none;
+      width: 1200px;
+      max-width: 95vw;
+      height: 680px;
+      max-height: 90vh;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      padding: 40px 50px;
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Dark Slide Style (Cover & Thanks) */
+    .slide.dark {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    /* Slide Header */
+    .slide-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #f59e0b;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .slide-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+
+    .slide.dark .slide-title {
+      color: #ffffff;
+      border-bottom-color: #334155;
+    }
+
+    /* Grids & Cards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    /* Bottom Control Bar */
+    .control-bar {
+      height: 55px;
+      background: #0f172a;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .btn-nav {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: #f59e0b;
+      color: #0f172a;
+    }
+
+    /* Speaker Notes Modal */
+    .speaker-notes-box {
+      margin-top: 15px;
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #92400e;
+      line-height: 1.5;
+    }
+    .speaker-notes-box strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #78350f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- SLIDE 1: BÌA -->
+    <div class="slide dark active" id="slide-1">
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: left; padding: 20px;">
+        <span style="display: inline-block; background: #1e293b; border: 1px solid #f59e0b; color: #f59e0b; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; width: fit-content; margin-bottom: 16px;">
+          ĐỒ ÁN TỐT NGHIỆP CÔNG NGHỆ THÔNG TIN
+        </span>
+        <h1 style="font-size: 36px; font-weight: 900; line-height: 1.25; margin-bottom: 14px; color: #ffffff;">
+          HỆ THỐNG THƯƠNG MẠI ĐIỆN TỬ<br>
+          <span style="color: #f59e0b;">PHÂN PHỐI IPAD CHÍNH HÃNG</span>
+        </h1>
+        <p style="font-size: 16px; color: #94a3b8; margin-bottom: 30px;">
+          Tích hợp Trợ lý Trí tuệ Nhân tạo Google Gemini RAG & Cổng thanh toán trực tuyến MoMo
+        </p>
+        <div style="background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 12px; max-width: 650px;">
+          <p style="font-size: 14px; margin-bottom: 6px;"><strong>Sinh viên thực hiện:</strong> <span style="color: #38bdf8;">Nguyễn Văn Hiếu</span></p>
+          <p style="font-size: 14px; margin-bottom: 6px;"><strong>Chuyên ngành:</strong> Công nghệ Thông tin</p>
+          <p style="font-size: 14px;"><strong>Công nghệ cốt lõi:</strong> Spring Boot 3.2 (Java 17) | Angular 22 | H2/SQL Server | Gemini 3.5 Flash | MoMo</p>
+        </div>
+      </div>
+      <div class="speaker-notes-box" style="background: #1e293b; color: #cbd5e1; border-color: #38bdf8;">
+        <strong>🗣️ Lời thoại mở đầu:</strong>
+        "Kính thưa Quý Thầy Cô trong Hội đồng phản biện, em tên là Nguyễn Văn Hiếu. Hôm nay em xin phép được báo cáo đồ án tốt nghiệp với đề tài: 'Xây dựng Hệ thống Thương mại Điện tử Phân phối iPad Chính Hãng tích hợp Trợ lý Trí tuệ Nhân tạo Google Gemini RAG và Cổng thanh toán trực tuyến MoMo'."
+      </div>
+    </div>
+
+    <!-- SLIDE 2: ĐẶT VẤN ĐỀ -->
+    <div class="slide" id="slide-2">
+      <div class="slide-badge">CHƯƠNG 1: TỔNG QUAN</div>
+      <div class="slide-title">1. Đặt Vấn Đề & Tính Cấp Thiết Của Đề Tài</div>
+      <div class="grid-3">
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <div class="card-title"><i class="fa-solid fa-chart-line"></i> Xu Hướng Mua Sắm Số</div>
+          <div class="card-desc">Nhu cầu làm việc di động, học tập trực tuyến và thiết kế đồ họa bằng máy tính bảng (iPad) tăng trưởng mạnh mẽ, đòi hỏi nền tảng bán lẻ trực tuyến hiện đại.</div>
+        </div>
+        <div class="card" style="border-top: 4px solid #f59e0b;">
+          <div class="card-title"><i class="fa-solid fa-layer-group"></i> Phân Khúc Phức Tạp</div>
+          <div class="card-desc">Apple phân bổ dải sản phẩm rất rộng: iPad Pro (M4/M2), iPad Air (M2/M1), iPad Mini 7, iPad Gen 10. Khách hàng dễ bối rối khi không có người tư vấn kỹ thuật chuyên sâu.</div>
+        </div>
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div class="card-title"><i class="fa-solid fa-robot"></i> Đột Phá AI & Thanh Toán</div>
+          <div class="card-desc">Cần có Trợ lý AI túc trực 24/7 hiểu rõ tồn kho thực tế, kết hợp thanh toán số một chạm (MoMo QR) để nâng cao tỷ lệ chuyển đổi đơn hàng.</div>
+        </div>
+      </div>
+      <div class="speaker-notes-box">
+        <strong>🗣️ Lời thoại thuyết trình:</strong>
+        "Lý do em chọn đề tài này xuất phát từ thực tế thị trường: iPad là dòng sản phẩm có giá trị cao, đa dạng cấu hình từ Pro, Air đến Mini, Gen. Người dùng thường gặp khó khăn khi chọn máy. Do đó, việc xây dựng một hệ thống chuyên biệt có Trợ lý AI tư vấn sát kho hàng là rất cấp thiết."
+      </div>
+    </div>
+
+    <!-- SLIDE 3: MỤC TIÊU ĐỀ TÀI -->
+    <div class="slide" id="slide-3">
+      <div class="slide-badge">CHƯƠNG 1: TỔNG QUAN</div>
+      <div class="slide-title">2. Mục Tiêu & Phạm Vi Đề Tài</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-bullseye"></i> Mục Tiêu Kỹ Thuật</div>
+          <div class="card-desc">
+            • Ứng dụng kiến trúc <strong>Monorepo</strong> phân tách rõ ràng giữa Spring Boot 3 và Angular 22.<br>
+            • Triển khai CSDL quan hệ lưu trữ bền vững (H2 File Mode tương thích MSSQL Server).<br>
+            • Tích hợp Trí tuệ Nhân tạo <strong>RAG</strong> chống ảo giác tri thức.<br>
+            • Tích hợp cổng thanh toán <strong>MoMo HMAC SHA-256</strong>.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-users-gear"></i> Mục Tiêu Nghiệp Vụ</div>
+          <div class="card-desc">
+            • <strong>Khách hàng:</strong> Trải nghiệm tìm kiếm thông minh, giỏ hàng, theo dõi đơn hàng 5 bước và gửi nhận xét đánh giá sao.<br>
+            • <strong>Quản trị viên:</strong> Điều phối vòng đời đơn hàng, duyệt và trả lời đánh giá, theo dõi Dashboard doanh thu và cơ cấu sản phẩm.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: PHÂN ĐỊNH KHỐI LƯỢNG (QUAN TRỌNG VỚI THẦY) -->
+    <div class="slide" id="slide-4">
+      <div class="slide-badge">BÁO CÁO TỰ CHỦ</div>
+      <div class="slide-title">3. Khẳng Định Tính Tự Chủ & Khối Lượng Đồ Án</div>
+      <div class="grid-2">
+        <div class="card" style="border: 2px solid #10b981; background: #f0fdf4;">
+          <div class="card-title" style="color: #15803d;"><i class="fa-solid fa-check-circle"></i> Sinh Viên Tự Làm 100% (Khối Lượng Chính)</div>
+          <div class="card-desc" style="color: #166534;">
+            ✔ <strong>Cơ sở dữ liệu:</strong> Tự thiết kế ERD 4 bảng quan hệ, khóa chính/khóa ngoại, ràng buộc toàn vẹn.<br>
+            ✔ <strong>Backend Spring Boot 3:</strong> Tự viết toàn bộ Controller, Service, Repository, DTO, mã hóa bảo mật, chữ ký số MoMo, API Thống kê.<br>
+            ✔ <strong>Frontend Angular:</strong> Tự dựng 100% Component, Two-way Data Binding, Order Tracking Stepper, Modal Admin.<br>
+            ✔ <strong>Kiến trúc RAG AI:</strong> Tự lập trình logic lọc kho hàng trước khi gọi AI và bộ dự phòng Smart Fallback.
+          </div>
+        </div>
+        <div class="card" style="border: 2px solid #3b82f6; background: #eff6ff;">
+          <div class="card-title" style="color: #1d4ed8;"><i class="fa-solid fa-cloud"></i> Dịch Vụ Ngoài Tích Hợp (Khai Báo Rõ)</div>
+          <div class="card-desc" style="color: #1e40af;">
+            🔗 <strong>Google Gemini API:</strong> Sử dụng mô hình đám mây <code>gemini-3.5-flash</code> để sinh ngôn ngữ tự nhiên.<br>
+            🔗 <strong>MoMo Payment Sandbox:</strong> Sử dụng môi trường thử nghiệm cổng thanh toán trực tuyến MoMo.<br>
+            🔗 <strong>Font & Icon:</strong> Google Fonts (Inter/Roboto), FontAwesome.
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes-box">
+        <strong>🗣️ Lời thoại thuyết trình:</strong>
+        "Em xin báo cáo rõ ràng với Hội đồng: Em chỉ tích hợp mô hình Gemini đám mây và cổng MoMo; toàn bộ phần CSDL, nghiệp vụ Spring Boot, giao diện Angular và thuật toán điều phối lọc RAG đều do chính em tự tay lập trình 100%."
+      </div>
+    </div>
+
+    <!-- SLIDE 5: KIẾN TRÚC HỆ THỐNG -->
+    <div class="slide" id="slide-5">
+      <div class="slide-badge">CHƯƠNG 2: THIẾT KẾ HỆ THỐNG</div>
+      <div class="slide-title">4. Kiến Trúc Hệ Thống (Layered Architecture)</div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: #eff6ff; border-left: 6px solid #3b82f6; padding: 14px 20px; border-radius: 8px;">
+          <strong style="color: #1e40af;">TẦNG 1: GIAO DIỆN CLIENT (ANGULAR 22 SPA)</strong>
+          <p style="font-size: 13px; color: #475569;">Standalone Components, TypeScript, Two-way Binding, HttpClient giao tiếp RESTful API qua cổng 4200.</p>
+        </div>
+        <div style="background: #f0fdf4; border-left: 6px solid #10b981; padding: 14px 20px; border-radius: 8px;">
+          <strong style="color: #166534;">TẦNG 2: MÁY CHỦ BACKEND (SPRING BOOT 3.2.4 - JAVA 17 LTS)</strong>
+          <p style="font-size: 13px; color: #475569;">Kiến trúc MVC 3 lớp: Controller tiếp nhận HTTP, Service giải quyết nghiệp vụ, Repository kết nối CSDL.</p>
+        </div>
+        <div style="background: #fefce8; border-left: 6px solid #f59e0b; padding: 14px 20px; border-radius: 8px;">
+          <strong style="color: #854d0e;">TẦNG 3: CƠ SỞ DỮ LIỆU (PERSISTENCE LAYER)</strong>
+          <p style="font-size: 13px; color: #475569;">H2 Database File Mode bền vững (./data/bananastore_db), tương thích 100% Microsoft SQL Server.</p>
+        </div>
+        <div style="background: #faf5ff; border-left: 6px solid #8b5cf6; padding: 14px 20px; border-radius: 8px;">
+          <strong style="color: #6b21a8;">TẦNG 4: DỊCH VỤ ĐÁM MÂY (CLOUD INTEGRATION)</strong>
+          <p style="font-size: 13px; color: #475569;">Google Gemini 3.5 Flash AI API và MoMo Payment Gateway.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: THIẾT KẾ CSDL -->
+    <div class="slide" id="slide-6">
+      <div class="slide-badge">CHƯƠNG 2: THIẾT KẾ CSDL</div>
+      <div class="slide-title">5. Thiết Kế Cơ Sở Dữ Liệu & Ràng Buộc Khóa Ngoại</div>
+      <div class="grid-4">
+        <div class="card" style="border-top: 4px solid #f59e0b;">
+          <div class="card-title" style="font-size: 14px;"><i class="fa-solid fa-tablet-screen-button"></i> products</div>
+          <div class="card-desc" style="font-size: 11px; font-family: monospace;">
+            <strong>id (PK)</strong><br>
+            name, series<br>
+            capacity, color<br>
+            price, original_price<br>
+            rating, reviews_count<br>
+            stock_quantity, status<br>
+            chip, screen_size<br>
+            image, badge
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <div class="card-title" style="font-size: 14px;"><i class="fa-solid fa-users"></i> registrations</div>
+          <div class="card-desc" style="font-size: 11px; font-family: monospace;">
+            <strong>id (PK)</strong><br>
+            username (UNIQUE)<br>
+            password_hash<br>
+            full_name<br>
+            phone_number<br>
+            address<br>
+            created_at
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div class="card-title" style="font-size: 14px;"><i class="fa-solid fa-box"></i> orders</div>
+          <div class="card-desc" style="font-size: 11px; font-family: monospace;">
+            <strong>id (PK)</strong><br>
+            <strong>product_id (FK)</strong><br>
+            customer_id (FK)<br>
+            customer_name<br>
+            quantity, unit_price<br>
+            total_price<br>
+            payment_method<br>
+            status (5 bước)
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid #8b5cf6;">
+          <div class="card-title" style="font-size: 14px;"><i class="fa-solid fa-star"></i> reviews</div>
+          <div class="card-desc" style="font-size: 11px; font-family: monospace;">
+            <strong>id (PK)</strong><br>
+            <strong>product_id (FK)</strong><br>
+            customer_name<br>
+            rating (1 - 5 ⭐)<br>
+            comment<br>
+            admin_reply<br>
+            status (APPROVED)
+          </div>
+        </div>
+      </div>
+      <div class="speaker-notes-box">
+        <strong>🗣️ Điểm cần nhấn mạnh với Thầy:</strong>
+        "Bảng orders và reviews đều có khóa ngoại product_id liên kết với bảng products để đảm bảo toàn vẹn dữ liệu, không có bản ghi mồ côi. Bảng products có sẵn các trường stock_quantity và chip để phục vụ lọc RAG."
+      </div>
+    </div>
+
+    <!-- SLIDE 7: PHÂN HỆ KHÁCH HÀNG -->
+    <div class="slide" id="slide-7">
+      <div class="slide-badge">CHƯƠNG 3: HIỆN THỰC HÓA</div>
+      <div class="slide-title">6. Tính Năng Nổi Bật - Phân Hệ Khách Hàng</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-magnifying-glass"></i> Tìm Kiếm & Lọc Máy Thông Minh</div>
+          <div class="card-desc">Lọc theo dòng iPad Pro, Air, Mini, Gen 10. Tìm kiếm theo từ khóa tức thì với Two-way Data Binding của Angular, sắp xếp theo mức giá và ưu đãi.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-truck-fast"></i> Theo Dõi Đơn Hàng (Order Tracking)</div>
+          <div class="card-desc">Tra cứu mã đơn với thanh tiến trình trực quan 5 bước: Chờ xác nhận ➔ Đang chuẩn bị ➔ Đang giao ➔ Đã giao ➔ Đã hủy.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-cart-shopping"></i> Giỏ Hàng & Đặt Hàng Linh Hoạt</div>
+          <div class="card-desc">Tự động tính tổng tiền, chiết khấu phần trăm. Hỗ trợ 2 phương thức: Nhận hàng trả tiền (COD) hoặc quét mã MoMo.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-comments"></i> Đánh Giá Sao & Phản Hồi</div>
+          <div class="card-desc">Khách hàng sau khi nhận máy có thể xếp hạng sao (1 - 5 ⭐) và gửi nhận xét. Xem câu trả lời phản hồi trực tiếp từ Ban quản trị.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: PHÂN HỆ QUẢN TRỊ -->
+    <div class="slide" id="slide-8">
+      <div class="slide-badge">CHƯƠNG 3: HIỆN THỰC HÓA</div>
+      <div class="slide-title">7. Tính Năng Nổi Bật - Phân Hệ Quản Trị (Admin)</div>
+      <div class="grid-3">
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <div class="card-title"><i class="fa-solid fa-list-check"></i> Quản Lý Đơn Hàng</div>
+          <div class="card-desc">Xem toàn bộ đơn đặt, lọc theo trạng thái, cập nhật tiến trình vận chuyển theo thời gian thực, quản lý thông tin giao nhận.</div>
+        </div>
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div class="card-title"><i class="fa-solid fa-reply"></i> Quản Lý Đánh Giá</div>
+          <div class="card-desc">Kiểm duyệt các bình luận của khách, chức năng <strong>Admin Reply</strong> trả lời phản hồi chính thức của cửa hàng.</div>
+        </div>
+        <div class="card" style="border-top: 4px solid #f59e0b;">
+          <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Analytics Dashboard</div>
+          <div class="card-desc">Báo cáo doanh thu thời gian thực (>230 triệu), thống kê số lượng khách, đơn hàng và biểu đồ phân bổ dòng máy bán chạy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: KIẾN TRÚC RAG (ĐIỂM NHẤN HỌC THUẬT) -->
+    <div class="slide" id="slide-9">
+      <div class="slide-badge">ĐIỂM NHẤN CÔNG NGHỆ</div>
+      <div class="slide-title">8. Phân Hệ Trí Tuệ Nhân Tạo & Kiến Trúc RAG</div>
+      <div class="grid-4" style="margin-bottom: 16px;">
+        <div class="card" style="text-align: center; border: 1px solid #3b82f6;">
+          <div style="font-size: 12px; font-weight: 700; color: #3b82f6; margin-bottom: 6px;">BƯỚC 1</div>
+          <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Khách Đặt Câu Hỏi</div>
+          <p style="font-size: 12px; color: #64748b;">"Tìm iPad vẽ đồ họa Procreate tầm 25 triệu"</p>
+        </div>
+        <div class="card" style="text-align: center; border: 1px solid #10b981;">
+          <div style="font-size: 12px; font-weight: 700; color: #10b981; margin-bottom: 6px;">BƯỚC 2 (RAG)</div>
+          <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Truy Vấn Kho Hàng</div>
+          <p style="font-size: 12px; color: #64748b;">Backend lọc máy stock > 0, status = 'IN_STOCK', chip M2/M4</p>
+        </div>
+        <div class="card" style="text-align: center; border: 1px solid #f59e0b;">
+          <div style="font-size: 12px; font-weight: 700; color: #f59e0b; margin-bottom: 6px;">BƯỚC 3</div>
+          <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Bơm Ngữ Cảnh & Luật</div>
+          <p style="font-size: 12px; color: #64748b;">Đóng gói danh sách máy + Guardrails cấm tư vấn máy ngoài kho</p>
+        </div>
+        <div class="card" style="text-align: center; border: 1px solid #8b5cf6;">
+          <div style="font-size: 12px; font-weight: 700; color: #8b5cf6; margin-bottom: 6px;">BƯỚC 4</div>
+          <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px;">Gemini Sinh Phản Hồi</div>
+          <p style="font-size: 12px; color: #64748b;">Gemini 3.5 Flash trả lời chuẩn, kèm thẻ sản phẩm tương tác</p>
+        </div>
+      </div>
+      <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 12px 18px; border-radius: 8px; font-size: 13px; color: #92400e;">
+        <strong>⭐ Giá trị giải quyết:</strong> Khắc phục triệt để lỗi ảo giác (Hallucination), cam kết 100% chỉ tư vấn máy còn hàng, tiết kiệm 78% chi phí token và có Smart Fallback chạy offline.
+      </div>
+    </div>
+
+    <!-- SLIDE 10: THANH TOÁN MOMO -->
+    <div class="slide" id="slide-10">
+      <div class="slide-badge">CHƯƠNG 3: HIỆN THỰC HÓA</div>
+      <div class="slide-title">9. Tích Hợp Cổng Thanh Toán MoMo Gateway</div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="card" style="flex-direction: row; align-items: center; gap: 20px;">
+          <div style="background: #a50064; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+          <div>
+            <strong style="font-size: 15px; color: #0f172a;">Tạo đơn đặt & Chuẩn bị tham số</strong>
+            <p style="font-size: 13px; color: #64748b;">Đóng gói các trường orderId, amount, orderInfo, partnerCode.</p>
+          </div>
+        </div>
+        <div class="card" style="flex-direction: row; align-items: center; gap: 20px;">
+          <div style="background: #a50064; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+          <div>
+            <strong style="font-size: 15px; color: #0f172a;">Chữ ký số bảo mật HMAC SHA-256</strong>
+            <p style="font-size: 13px; color: #64748b;">Băm toàn bộ thông tin cùng SecretKey để chống việc kẻ gian can thiệp sửa đổi số tiền trên đường truyền.</p>
+          </div>
+        </div>
+        <div class="card" style="flex-direction: row; align-items: center; gap: 20px;">
+          <div style="background: #a50064; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</div>
+          <div>
+            <strong style="font-size: 15px; color: #0f172a;">Mã QR Code & Xử lý Webhook (IPN)</strong>
+            <p style="font-size: 13px; color: #64748b;">MoMo trả về mã QR để khách quét; sau khi trừ tiền, MoMo gọi IPN ngầm về Backend cập nhật đơn hàng thành công.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: ĐÁNH GIÁ KẾT QUẢ -->
+    <div class="slide" id="slide-11">
+      <div class="slide-badge">CHƯƠNG 4: THỰC NGHIỆM & ĐÁNH GIÁ</div>
+      <div class="slide-title">10. Đánh Giá Kết Quả Thực Nghiệm & Tối Ưu Hóa</div>
+      <div class="grid-4">
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 36px; font-weight: 900; color: #2563eb; margin: 10px 0;">100%</div>
+          <strong style="font-size: 14px; margin-bottom: 6px;">Hoàn Thành Chức Năng</strong>
+          <p style="font-size: 12px; color: #64748b;">Khách hàng, Đơn hàng, Đánh giá, Trợ lý AI và MoMo hoạt động ổn định.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 36px; font-weight: 900; color: #10b981; margin: 10px 0;">7.6s</div>
+          <strong style="font-size: 14px; margin-bottom: 6px;">Tối Ưu Khởi Động BE</strong>
+          <p style="font-size: 12px; color: #64748b;">Áp dụng JVM TieredStopAtLevel=1 giúp giảm 50% thời gian boot Spring Boot.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 36px; font-weight: 900; color: #f59e0b; margin: 10px 0;">17 SP</div>
+          <strong style="font-size: 14px; margin-bottom: 6px;">Ảnh Apple CDN Chuẩn</strong>
+          <p style="font-size: 12px; color: #64748b;">17 máy iPad có ảnh render chính hãng sắc nét, chuẩn mã màu và kích thước.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <div style="font-size: 36px; font-weight: 900; color: #8b5cf6; margin: 10px 0;">UTF-8</div>
+          <strong style="font-size: 14px; margin-bottom: 6px;">Chuẩn Hóa Tiếng Việt</strong>
+          <p style="font-size: 12px; color: #64748b;">Phông chữ Inter/Roboto sắc nét, triệt tiêu 100% lỗi vỡ phông.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: HƯỚNG PHÁT TRIỂN -->
+    <div class="slide" id="slide-12">
+      <div class="slide-badge">KẾT LUẬN</div>
+      <div class="slide-title">11. Hướng Phát Triển & Mở Rộng Đề Tài</div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-mobile-screen"></i> Ứng Dụng Di Động (Mobile App)</div>
+          <div class="card-desc">Phát triển ứng dụng Flutter hoặc React Native đa nền tảng (iOS/Android) tái sử dụng toàn bộ hệ thống Spring Boot RESTful API hiện có.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-database"></i> Nâng Cấp Vector Database Cho AI</div>
+          <div class="card-desc">Tích hợp cơ sở dữ liệu Vector (ChromaDB / pgvector / Pinecone) để lưu trữ Embeddings thông số kỹ thuật, tìm kiếm ngữ nghĩa nâng cao.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-credit-card"></i> Mở Rộng Cổng Thanh Toán</div>
+          <div class="card-desc">Tích hợp thêm VNPay, ZaloPay và thẻ quốc tế Visa / MasterCard.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-brands fa-docker"></i> Containerization & Cloud Deploy</div>
+          <div class="card-desc">Đóng gói Docker Containers, thiết lập quy trình CI/CD GitHub Actions tự động deploy lên hạ tầng điện toán đám mây.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: KẾT THÚC & Q&A -->
+    <div class="slide dark" id="slide-13">
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <h1 style="font-size: 40px; font-weight: 900; color: #f59e0b; margin-bottom: 16px;">
+          XIN TRÂN TRỌNG CẢM ƠN!
+        </h1>
+        <p style="font-size: 18px; color: #cbd5e1; max-width: 700px; margin-bottom: 30px;">
+          Kính chúc Quý Thầy Cô trong Hội đồng thật nhiều sức khỏe, hạnh phúc và thành công!
+        </p>
+        <div style="background: #1e293b; border: 1px solid #334155; padding: 20px 40px; border-radius: 12px;">
+          <h3 style="color: #ffffff; font-size: 16px; margin-bottom: 8px;">SINH VIÊN SẴN SÀNG NHẬN Ý KIẾN ĐÓNG GÓP VÀ TRẢ LỜI CÂU HỎI PHẢN BIỆN</h3>
+          <p style="color: #38bdf8; font-size: 13px;">GitHub Repository: https://github.com/hieunv2323/ipad.git</p>
+        </div>
+      </div>
+      <div class="speaker-notes-box" style="background: #1e293b; color: #cbd5e1; border-color: #38bdf8;">
+        <strong>🗣️ Lời thoại kết thúc:</strong>
+        "Trên đây là toàn bộ phần trình bày đồ án của em. Em xin chân thành cảm ơn Quý Thầy Cô đã lắng nghe. Em rất mong nhận được những lời nhận xét, góp ý quý báu của Thầy Cô để đồ án được hoàn thiện hơn nữa. Em xin sẵn sàng trả lời các câu hỏi phản biện ạ!"
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTROL BAR -->
+  <div class="control-bar">
+    <div>
+      <span style="font-weight: 700; color: #f59e0b;">🍌 Banana iPad Store</span> | Đồ Án Tốt Nghiệp CNTT
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <span id="slide-counter" style="font-weight: 600;">Slide 1 / 13</span>
+      <button class="btn-nav" id="btn-prev"><i class="fa-solid fa-arrow-left"></i> Trước</button>
+      <button class="btn-nav" id="btn-next">Tiếp <i class="fa-solid fa-arrow-right"></i></button>
+      <button class="btn-nav" id="btn-fullscreen"><i class="fa-solid fa-expand"></i> Toàn màn hình (F11)</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 13;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      document.querySelectorAll('.slide').forEach((s, idx) => {
+        s.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+
+      document.getElementById('slide-counter').innerText = `Slide ${currentSlide} / ${totalSlides}`;
+    }
+
+    document.getElementById('btn-prev').addEventListener('click', () => showSlide(currentSlide - 1));
+    document.getElementById('btn-next').addEventListener('click', () => showSlide(currentSlide + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        showSlide(currentSlide - 1);
+      }
+    });
+
+    document.getElementById('btn-fullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+  </script>
+</body>
+</html>
